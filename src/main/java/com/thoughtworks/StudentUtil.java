@@ -24,8 +24,7 @@ public class StudentUtil {
             e.printStackTrace();
         }
     }
-
-    //搞不懂什么用处 TODO
+    
     public static Connection getConnection() {
         return conn;
     }
