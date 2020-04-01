@@ -14,13 +14,6 @@ public class Account {
     public Account() {
     }
 
-    public Account(String name, String phone, String email, String password) {
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.password = password;
-    }
-
     public String getName() {
         return name;
     }

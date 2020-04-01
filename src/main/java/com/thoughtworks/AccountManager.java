@@ -37,6 +37,11 @@ public class AccountManager {
     }
 
     public void login() {
+        if (chance == MAX_CHANCE) {
+            System.out.println(String.format("您已%d次输错密码，账号被锁定", MAX_CHANCE));
+            chance = 0;
+            return;
+        }
         Scanner scanner = new Scanner(System.in);
         String userInput = scanner.next();
         Account account = new Account();
@@ -50,7 +55,6 @@ public class AccountManager {
             System.out.println("请按正确格式输入注册信息：");
             login();
         } catch (SQLException e) {
-            e.printStackTrace();
             System.out.println("密码或用户名错误");
             System.out.println("请重新输入用户名和密码:");
             chance++;

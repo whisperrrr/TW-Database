@@ -1,6 +1,7 @@
 package com.thoughtworks.database;
 
 import com.thoughtworks.Account;
+import com.thoughtworks.exception.NameNotMatchPassword;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,14 +45,15 @@ public class AccountDatabase {
 
     private Account parseQueryToAccount(ResultSet resultSet) throws SQLException {
         Account account = new Account();
-        while (resultSet.next()) {
+        if (resultSet.next()) {
             account.setName(resultSet.getString("name"));
             account.setPhone(resultSet.getString("mobile"));
             account.setEmail(resultSet.getString("email"));
             account.setPassword(resultSet.getString("password"));
+        } else {
+            throw new NameNotMatchPassword();
         }
         return account;
     }
-
 }
 
