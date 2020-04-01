@@ -78,7 +78,6 @@ public class Account {
         checkPassword();
     }
 
-
     // TODO 可以用正则试试
     private void checkName() throws InputNotLegalException {
         if (name.length() < 2 || name.length() > 10) {

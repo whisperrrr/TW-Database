@@ -39,7 +39,16 @@ public class AccountManager {
     public void login() {
         if (chance == MAX_CHANCE) {
             System.out.println(String.format("您已%d次输错密码，账号被锁定", MAX_CHANCE));
-            chance = 0;
+            new Thread(() -> {
+                try {
+                    Thread.sleep(20000);
+                    chance = 0;
+                    System.out.println("账号锁定已解除，您可以再次登陆");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+            //chance = 0;
             return;
         }
         Scanner scanner = new Scanner(System.in);
