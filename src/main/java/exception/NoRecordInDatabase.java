@@ -1,6 +1,8 @@
 package exception;
 
-public class NoRecordInDatabase extends Exception {
+import java.sql.SQLException;
+
+public class NoRecordInDatabase extends SQLException {
     public NoRecordInDatabase() {
     }
 

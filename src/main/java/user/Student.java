@@ -1,12 +1,15 @@
 package user;
 
-public class Student {
+public class Student extends User{
     private String id;
     private String name;
     private String sex;
     private String sclass;
     private String account;
     private String password;
+
+    public Student() {
+    }
 
     public Student(String id, String name, String sex, String sclass) {
         this.id = id;
@@ -29,5 +32,10 @@ public class Student {
 
     public String getSclass() {
         return sclass;
+    }
+
+    @Override
+    public void showFunction() {
+
     }
 }
