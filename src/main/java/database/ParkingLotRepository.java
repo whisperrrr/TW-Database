@@ -2,6 +2,7 @@ package database;
 
 import entity.ParkingLot;
 import entity.ParkingSpace;
+import entity.Ticket;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -62,7 +63,6 @@ public class ParkingLotRepository {
 
             preparedStatement.executeUpdate();
         }
-
     }
 
     public static void empty() {
@@ -71,6 +71,20 @@ public class ParkingLotRepository {
             statement.executeUpdate("TRUNCATE TABLE parking_lot");
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static List<ParkingSpace> queryByTicket(Ticket userTicket) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT * FROM parking_lot WHERE mark = ? AND id = ? AND is_empty = 0 AND car_number = ?";
+        ResultSet resultSet;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setString(1,userTicket.getParkingLotMark());
+            preparedStatement.setInt(2,userTicket.getParkingLotId());
+            preparedStatement.setString(3,userTicket.getCarNumber());
+
+            resultSet = preparedStatement.executeQuery();
+            return getParkingSpaceList(resultSet);
         }
     }
 }

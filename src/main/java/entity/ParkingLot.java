@@ -1,6 +1,7 @@
 package entity;
 
 import database.ParkingLotRepository;
+import exception.InvalidTicketException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -49,6 +50,16 @@ public class ParkingLot {
             ParkingLotRepository.update(parkingSpace, carNumber);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+    // 取车
+    public static String fetchCar(Ticket userTicket) throws SQLException {
+        List<ParkingSpace> parkingSpace = ParkingLotRepository.queryByTicket(userTicket);
+        if (parkingSpace.size() == 0) {
+            throw new InvalidTicketException();
+        } else {
+            ParkingLotRepository.update(parkingSpace.get(0),null);
+            return userTicket.getCarNumber();
         }
     }
 }

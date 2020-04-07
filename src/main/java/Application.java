@@ -2,6 +2,7 @@ import database.ParkingLotRepository;
 import entity.ParkingLot;
 import entity.ParkingSpace;
 import entity.Ticket;
+import exception.InvalidTicketException;
 import exception.ParkingLotFullException;
 import util.ParseUtil;
 
@@ -67,13 +68,19 @@ public class Application {
         if (emptyParkingSpace.size() == 0) {
             throw new ParkingLotFullException();
         } else {
-            Ticket ticket = ParkingLot.getTicket(emptyParkingSpace.get(0),carNumber);
+            Ticket ticket = ParkingLot.getTicket(emptyParkingSpace.get(0), carNumber);
             return ticket.toString();
         }
     }
 
     public static String fetch(String ticket) {
-        return "";
+        String carNumber = "";
+        Ticket userTicket = ParseUtil.parseToTicket(ticket);
+        try {
+            carNumber = ParkingLot.fetchCar(userTicket);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return carNumber;
     }
-
 }

@@ -11,6 +11,18 @@ public class Ticket {
         this.carNumber = carNumber;
     }
 
+    public String getParkingLotMark() {
+        return parkingLotMark;
+    }
+
+    public int getParkingLotId() {
+        return parkingLotId;
+    }
+
+    public String getCarNumber() {
+        return carNumber;
+    }
+
     @Override
     public String toString() {
         return String.format("%s,%d,%s", parkingLotMark, parkingLotId, carNumber);
