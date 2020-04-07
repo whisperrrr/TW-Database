@@ -1,5 +1,6 @@
 package database;
 
+import entity.Subject;
 import user.Student;
 
 import java.sql.Connection;
@@ -19,20 +20,22 @@ public class StudentRepository {
             return getStudentList(resultSet);
         }
     }
+
     // 新增学生信息
     public void save(Student student) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "INSERT INTO student(student_id, sname, ssex, sclass)"
+        String sql = "INSERT INTO student(student_id, sname, sage, ssex)"
                 + "VALUES (?, ?, ?, ?);";
         try (PreparedStatement ptmt = connection.prepareStatement(sql)) {
             ptmt.setString(1, student.getId());
             ptmt.setString(2, student.getName());
-            ptmt.setString(3, student.getSex());
-            ptmt.setString(4, student.getSclass());
+            ptmt.setInt(3, student.getAge());
+            ptmt.setString(4, student.getSex());
 
             ptmt.executeUpdate();
         }
     }
+
     // 删除学生信息
     public void delete(String name) throws SQLException {
         Connection connection = DbUtil.getConnection();
@@ -49,6 +52,7 @@ public class StudentRepository {
             Student stu = new Student(
                     resultSet.getString("student_id"),
                     resultSet.getString("sname"),
+                    resultSet.getInt("sage"),
                     resultSet.getString("ssex"),
                     resultSet.getString("sclass")
             );
@@ -56,4 +60,6 @@ public class StudentRepository {
         }
         return studentList;
     }
+
+
 }

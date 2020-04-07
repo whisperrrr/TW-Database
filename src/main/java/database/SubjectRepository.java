@@ -50,7 +50,7 @@ public class SubjectRepository {
         }
     }
     // 新增课程信息
-    public void save(Subject subject) throws SQLException {
+    public static void save(Subject subject) throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "INSERT INTO subject(subject_id, subject_name)"
                 + "VALUES (?, ?);";

@@ -23,7 +23,7 @@ public class TeacherRepository {
     // 通过名字查询
     public ArrayList<Teacher> queryByName(String name) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT * FROM teacher WHERE t_name = ?";
+        String sql = "SELECT * FROM teacher WHERE tname = ?";
 
         ResultSet resultSet;
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
