@@ -1,17 +1,21 @@
 package database;
 
 import entity.ParkingLot;
+import entity.ParkingSpace;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParkingLotRepository {
     public static void save(ParkingLot parkingLot) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "INSERT INTO parking_lot(mark, id, state) " +
-                "VALUES (?, ?, 'N')";
+        String sql = "INSERT INTO parking_lot(mark, id, is_empty) " +
+                "VALUES (?, ?, 1)";
         for (int i = 0; i < parkingLot.getMaxParkNum(); i++) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setString(1, parkingLot.getMark());
@@ -22,7 +26,46 @@ public class ParkingLotRepository {
         }
     }
 
-    public static void empty(){
+    public static List<ParkingSpace> queryByState(Boolean isEmpty) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT * FROM parking_lot WHERE is_empty = ?";
+        ResultSet resultSet;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setBoolean(1, isEmpty);
+            resultSet = preparedStatement.executeQuery();
+            return getParkingSpaceList(resultSet);
+        }
+    }
+
+    private static List<ParkingSpace> getParkingSpaceList(ResultSet resultSet) throws SQLException {
+        ArrayList<ParkingSpace> parkingSpaces = new ArrayList<>();
+
+        while (resultSet.next()) {
+            ParkingSpace parkingSpace = new ParkingSpace(resultSet.getString("mark"),
+                    resultSet.getInt("id"),
+                    resultSet.getBoolean("is_empty"),
+                    resultSet.getString("car_number"));
+            parkingSpaces.add(parkingSpace);
+        }
+
+        return parkingSpaces;
+    }
+
+    public static void update(ParkingSpace parkingSpace,String carNumber) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "UPDATE parking_lot SET is_empty = ?, car_number = ? WHERE mark = ? and id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setBoolean(1,!parkingSpace.getEmpty());
+            preparedStatement.setString(2,carNumber);
+            preparedStatement.setString(3,parkingSpace.getMark());
+            preparedStatement.setInt(4,parkingSpace.getId());
+
+            preparedStatement.executeUpdate();
+        }
+
+    }
+
+    public static void empty() {
         Connection connection = DbUtil.getConnection();
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("TRUNCATE TABLE parking_lot");

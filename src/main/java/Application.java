@@ -1,5 +1,8 @@
 import database.ParkingLotRepository;
 import entity.ParkingLot;
+import entity.ParkingSpace;
+import entity.Ticket;
+import exception.ParkingLotFullException;
 import util.ParseUtil;
 
 import java.sql.SQLException;
@@ -50,7 +53,7 @@ public class Application {
         ParkingLotRepository.empty();
         // 根据输入重新初始化停车场数据
         List<ParkingLot> parkingLots = ParseUtil.parseToParkingLot(initInfo);
-        parkingLots.stream().forEach(ele -> {
+        parkingLots.forEach(ele -> {
             try {
                 ParkingLotRepository.save(ele);
             } catch (SQLException e) {
@@ -60,7 +63,13 @@ public class Application {
     }
 
     public static String park(String carNumber) {
-        return "";
+        List<ParkingSpace> emptyParkingSpace = ParkingLot.getEmptyParkingSpace();
+        if (emptyParkingSpace.size() == 0) {
+            throw new ParkingLotFullException();
+        } else {
+            Ticket ticket = ParkingLot.getTicket(emptyParkingSpace.get(0),carNumber);
+            return ticket.toString();
+        }
     }
 
     public static String fetch(String ticket) {
