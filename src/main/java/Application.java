@@ -2,7 +2,6 @@ import database.ParkingLotRepository;
 import entity.ParkingLot;
 import entity.ParkingSpace;
 import entity.Ticket;
-import exception.InvalidTicketException;
 import exception.ParkingLotFullException;
 import util.ParseUtil;
 

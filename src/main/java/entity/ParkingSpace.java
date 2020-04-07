@@ -28,7 +28,4 @@ public class ParkingSpace {
         return isEmpty;
     }
 
-    public String getCarNumber() {
-        return carNumber;
-    }
 }
