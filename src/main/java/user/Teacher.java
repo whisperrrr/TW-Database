@@ -5,8 +5,6 @@ public class Teacher extends User {
     private String name;
     private String sex;
     private String subject;
-    private String account;
-    private String password;
 
     public Teacher() {
     }

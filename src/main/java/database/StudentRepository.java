@@ -1,6 +1,5 @@
 package database;
 
-import entity.Subject;
 import user.Student;
 
 import java.sql.Connection;

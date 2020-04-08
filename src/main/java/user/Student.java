@@ -6,8 +6,6 @@ public class Student extends User {
     private int age;
     private String sex;
     private String sclass;
-    private String account;
-    private String password;
 
     public Student() {
     }
@@ -34,10 +32,6 @@ public class Student extends User {
 
     public int getAge() {
         return age;
-    }
-
-    public String getSclass() {
-        return sclass;
     }
 
     public void setId(String id) {

@@ -13,7 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AccountRepository {
-    public static User identifyUser(Account account) throws SQLException, NoRecordInDatabase {
+    public static User identifyUser(Account account) throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "SELECT identity FROM account WHERE account = ? AND password = ?";
 
@@ -27,7 +27,7 @@ public class AccountRepository {
         }
     }
 
-    private static User parseToUser(ResultSet resultSet) throws SQLException, NoRecordInDatabase {
+    private static User parseToUser(ResultSet resultSet) throws SQLException {
         User user = null;
         if (resultSet.first()) {
             String identity = resultSet.getString("identity");

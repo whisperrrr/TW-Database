@@ -1,6 +1,7 @@
 package util;
 
 import entity.Account;
+import entity.Examination;
 import entity.Subject;
 import exception.InputNotLegalException;
 import user.Student;
@@ -18,6 +19,7 @@ public class ParseUtil {
         }
         return account;
     }
+
     // 新增学生信息，输入变成Student
     public static Student parseToStudent(String input) throws InputNotLegalException {
         String[] inputInfo = input.split(",");
@@ -32,6 +34,7 @@ public class ParseUtil {
         }
         return student;
     }
+
     // 新增课程信息，输入变成Subject
     public static Subject parseToSubject(String input) throws InputNotLegalException {
         String[] inputInfo = input.split(",");
@@ -43,6 +46,20 @@ public class ParseUtil {
             throw new InputNotLegalException("您的输入不合法，请按规定格式输入");
         }
         return subject;
+    }
+
+    // 修改学生成绩，输入格式为 学生id,试卷号,修改后的成绩，输出为examination
+    public static Examination parseToExamination(String input) throws InputNotLegalException {
+        String[] inputInfo = input.split(",");
+        Examination examination = new Examination();
+        if (inputInfo.length == 3) {
+            examination.setStudentId(inputInfo[0].split(":")[1]);
+            examination.setTestPaperId(inputInfo[1].split(":")[1]);
+            examination.setScore(inputInfo[2].split(":")[1]);
+        } else {
+            throw new InputNotLegalException("您的输入不合法，请按规定格式输入");
+        }
+        return examination;
     }
 
 }
