@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 
 public class ParseUtil {
     public static List<ParkingLot> parseToParkingLot(String input) {
+        String parkingLotRegExPattern = "^([A-Z]:\\d+)(,[A-Z]:\\d+)*";
+        FormatUtil.inputFormat(input,parkingLotRegExPattern);
+
         String[] parkingLots = input.split(",");
         return Arrays.stream(parkingLots)
                 .sorted()
@@ -17,6 +20,9 @@ public class ParseUtil {
     }
 
     public static Ticket parseToTicket(String input) {
+        String ticketRegExPattern = "^[A-Z],\\-?\\d+,[A-Z][0-9]{5}";
+        FormatUtil.inputFormat(input,ticketRegExPattern);
+
         String[] ticketInfo = input.split(",");
         return new Ticket(ticketInfo[0],
                 Integer.parseInt(ticketInfo[1]),
