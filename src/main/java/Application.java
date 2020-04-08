@@ -1,4 +1,5 @@
 import database.ParkingLotRepository;
+import entity.CarParker;
 import entity.ParkingLot;
 import entity.ParkingSpace;
 import entity.Ticket;
@@ -30,21 +31,27 @@ public class Application {
 
     private static void handle(String choice) {
         Scanner scanner = new Scanner(System.in);
-        if (choice.equals("1")) {
-            System.out.println("请输入初始化数据\n格式为\"停车场编号1：车位数,停车场编号2：车位数\" 如 \"A:8,B:9\"：");
-            String initInfo = scanner.next();
-            init(initInfo);
-        } else if (choice.equals("2")) {
-            System.out.println("请输入车牌号\n格式为\"车牌号\" 如: \"A12098\"：");
-            String carInfo = scanner.next();
-            String ticket = park(carInfo);
-            String[] ticketDetails = ticket.split(",");
-            System.out.format("已将您的车牌号为%s的车辆停到%s停车场%s号车位，停车券为：%s，请您妥善保存。\n", ticketDetails[2], ticketDetails[0], ticketDetails[1], ticket);
-        } else if (choice.equals("3")) {
-            System.out.println("请输入停车券信息\n格式为\"停车场编号1,车位编号,车牌号\" 如 \"A,1,8\"：");
-            String ticket = scanner.next();
-            String car = fetch(ticket);
-            System.out.format("已为您取到车牌号为%s的车辆，很高兴为您服务，祝您生活愉快!\n", car);
+        switch (choice) {
+            case "1":
+                System.out.println("请输入初始化数据\n格式为\"停车场编号1：车位数,停车场编号2：车位数\" 如 \"A:8,B:9\"：");
+                String initInfo = scanner.next();
+                init(initInfo);
+                break;
+            case "2": {
+                System.out.println("请输入车牌号\n格式为\"车牌号\" 如: \"A12098\"：");
+                String carInfo = scanner.next();
+                String ticket = park(carInfo);
+                String[] ticketDetails = ticket.split(",");
+                System.out.format("已将您的车牌号为%s的车辆停到%s停车场%s号车位，停车券为：%s，请您妥善保存。\n", ticketDetails[2], ticketDetails[0], ticketDetails[1], ticket);
+                break;
+            }
+            case "3": {
+                System.out.println("请输入停车券信息\n格式为\"停车场编号1,车位编号,车牌号\" 如 \"A,1,8\"：");
+                String ticket = scanner.next();
+                String car = fetch(ticket);
+                System.out.format("已为您取到车牌号为%s的车辆，很高兴为您服务，祝您生活愉快!\n", car);
+                break;
+            }
         }
     }
 
@@ -63,11 +70,11 @@ public class Application {
     }
 
     public static String park(String carNumber) {
-        List<ParkingSpace> emptyParkingSpace = ParkingLot.getEmptyParkingSpace();
+        List<ParkingSpace> emptyParkingSpace = CarParker.getEmptyParkingSpace();
         if (emptyParkingSpace.size() == 0) {
             throw new ParkingLotFullException();
         } else {
-            Ticket ticket = ParkingLot.getTicket(emptyParkingSpace.get(0), carNumber);
+            Ticket ticket = CarParker.getTicket(emptyParkingSpace.get(0), carNumber);
             return ticket.toString();
         }
     }
@@ -76,7 +83,7 @@ public class Application {
         String carNumber = "";
         Ticket userTicket = ParseUtil.parseToTicket(ticket);
         try {
-            carNumber = ParkingLot.fetchCar(userTicket);
+            carNumber = CarParker.fetchCar(userTicket);
         } catch (SQLException e) {
             e.printStackTrace();
         }
