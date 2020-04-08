@@ -5,8 +5,6 @@ import entity.ParkingSpace;
 import entity.Ticket;
 import exception.ParkingLotFullException;
 import util.ParseUtil;
-
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -60,13 +58,7 @@ public class Application {
         ParkingLotRepository.empty();
         // 根据输入重新初始化停车场数据
         List<ParkingLot> parkingLots = ParseUtil.parseToParkingLot(initInfo);
-        parkingLots.forEach(ele -> {
-            try {
-                ParkingLotRepository.save(ele);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
+        parkingLots.forEach(ParkingLotRepository::save);
     }
 
     public static String park(String carNumber) {
@@ -80,13 +72,7 @@ public class Application {
     }
 
     public static String fetch(String ticket) {
-        String carNumber = "";
         Ticket userTicket = ParseUtil.parseToTicket(ticket);
-        try {
-            carNumber = CarParker.fetchCar(userTicket);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return carNumber;
+        return CarParker.fetchCar(userTicket);
     }
 }

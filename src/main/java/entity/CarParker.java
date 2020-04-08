@@ -4,47 +4,49 @@ import database.ParkingLotRepository;
 import exception.InvalidTicketException;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CarParker {
     // 获取空的停车位
     public static List<ParkingSpace> getEmptyParkingSpace() {
-        List<ParkingSpace> parkingSpaces = new ArrayList<>();
-        try {
-            parkingSpaces = ParkingLotRepository.queryByState(true);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return parkingSpaces;
+        return ParkingLotRepository.queryByState(true);
     }
 
     // 获得车票
     public static Ticket getTicket(ParkingSpace parkingSpace, String carNumber) {
-        parkCarToEmptySpace(parkingSpace, carNumber);
+        Ticket ticket = null;
 
-        return new Ticket(parkingSpace.getMark(),
-                parkingSpace.getId(),
-                carNumber);
-    }
-
-    // 将车停在空位置上
-    public static void parkCarToEmptySpace(ParkingSpace parkingSpace, String carNumber) {
         try {
-            ParkingLotRepository.update(parkingSpace, carNumber);
+            parkCarToEmptySpace(parkingSpace, carNumber);
+            ticket = new Ticket(parkingSpace.getMark(),
+                    parkingSpace.getId(),
+                    carNumber);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return ticket;
+    }
+
+    // 将车停在空位置上
+    public static void parkCarToEmptySpace(ParkingSpace parkingSpace, String carNumber) throws SQLException {
+        ParkingLotRepository.update(parkingSpace, carNumber);
     }
 
     // 取车
-    public static String fetchCar(Ticket userTicket) throws SQLException {
+    public static String fetchCar(Ticket userTicket) {
+        String fetchCarNumber = null;
         List<ParkingSpace> parkingSpace = ParkingLotRepository.queryByTicket(userTicket);
         if (parkingSpace.size() == 0) {
             throw new InvalidTicketException();
         } else {
-            ParkingLotRepository.update(parkingSpace.get(0), null);
-            return userTicket.getCarNumber();
+            try {
+                ParkingLotRepository.update(parkingSpace.get(0), null);
+                fetchCarNumber = userTicket.getCarNumber();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return fetchCarNumber;
         }
     }
 }
