@@ -13,10 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParkingLotRepository {
+    // 初始化ParingLot
     public static void save(ParkingLot parkingLot) {
         Connection connection = DbUtil.getConnection();
         String sql = "INSERT INTO parking_lot(mark, id, is_empty) " +
                 "VALUES (?, ?, 1)";
+
         for (int i = 0; i < parkingLot.getMaxParkNum(); i++) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setString(1, parkingLot.getMark());
@@ -29,9 +31,13 @@ public class ParkingLotRepository {
         }
     }
 
+    // 根据停车位的状态查询，返回相应状态的停车位
     public static List<ParkingSpace> queryByState(Boolean isEmpty) {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT * FROM parking_lot WHERE is_empty = ?";
+        String sql = "SELECT mark, id, is_empty, car_number " +
+                "FROM parking_lot " +
+                "WHERE is_empty = ?";
+
         ResultSet resultSet;
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setBoolean(1, isEmpty);
@@ -42,9 +48,13 @@ public class ParkingLotRepository {
         }
     }
 
+    // 根据停车位和车来更新数据库中停车位的状态
     public static void update(ParkingSpace parkingSpace, String carNumber) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "UPDATE parking_lot SET is_empty = ?, car_number = ? WHERE mark = ? and id = ?";
+        String sql = "UPDATE parking_lot " +
+                "SET is_empty = ?, car_number = ? " +
+                "WHERE mark = ? AND id = ?";
+
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setBoolean(1, !parkingSpace.getEmpty());
             preparedStatement.setString(2, carNumber);
@@ -55,6 +65,7 @@ public class ParkingLotRepository {
         }
     }
 
+    // 清空数据库
     public static void empty() {
         Connection connection = DbUtil.getConnection();
         try (Statement statement = connection.createStatement()) {
@@ -64,9 +75,13 @@ public class ParkingLotRepository {
         }
     }
 
+    // 根据票据来查询停车位
     public static List<ParkingSpace> queryByTicket(Ticket userTicket) {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT * FROM parking_lot WHERE mark = ? AND id = ? AND is_empty = 0 AND car_number = ?";
+        String sql = "SELECT mark, id, is_empty, car_number " +
+                "FROM parking_lot " +
+                "WHERE mark = ? AND id = ? AND is_empty = 0 AND car_number = ?";
+
         ResultSet resultSet;
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, userTicket.getParkingLotMark());
@@ -80,6 +95,7 @@ public class ParkingLotRepository {
         }
     }
 
+    // 将resultSet转化为停车位列表
     private static List<ParkingSpace> getParkingSpaceList(ResultSet resultSet) throws SQLException {
         ArrayList<ParkingSpace> parkingSpaces = new ArrayList<>();
 
