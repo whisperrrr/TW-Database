@@ -46,8 +46,11 @@ public class Application {
             case "3": {
                 System.out.println("请输入停车券信息\n格式为\"停车场编号1,车位编号,车牌号\" 如 \"A,1,8\"：");
                 String ticket = scanner.next();
-                String car = fetch(ticket);
-                System.out.format("已为您取到车牌号为%s的车辆，很高兴为您服务，祝您生活愉快!\n", car);
+                Ticket newTicketAfterFetch = fetch(ticket);
+                System.out.format("已为您取到车牌号为%s的车辆，停车时间为%d分钟，收费%f元，很高兴为您服务，祝您生活愉快!\n",
+                        newTicketAfterFetch.getCarNumber(),
+                        newTicketAfterFetch.getParkInTime(),
+                        newTicketAfterFetch.getCharge());
                 break;
             }
         }
@@ -71,7 +74,7 @@ public class Application {
         }
     }
 
-    public static String fetch(String ticket) {
+    public static Ticket fetch(String ticket) {
         Ticket userTicket = ParseUtil.parseToTicket(ticket);
         return CarParker.fetchCar(userTicket);
     }

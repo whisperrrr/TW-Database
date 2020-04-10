@@ -9,11 +9,12 @@ public class ParkingSpace {
     private String carNumber;
     private Date parkInTime;
 
-    public ParkingSpace(String mark, int id, Boolean isEmpty, String carNumber) {
+    public ParkingSpace(String mark, int id, Boolean isEmpty, String carNumber, Date parkInTime) {
         this.mark = mark;
         this.id = id;
         this.isEmpty = isEmpty;
         this.carNumber = carNumber;
+        this.parkInTime = parkInTime;
     }
 
     public String getMark() {
@@ -28,4 +29,11 @@ public class ParkingSpace {
         return isEmpty;
     }
 
+    public void setParkInTime(Date parkInTime) {
+        this.parkInTime = parkInTime;
+    }
+
+    public Date getParkInTime() {
+        return parkInTime;
+    }
 }

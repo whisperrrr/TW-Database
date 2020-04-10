@@ -16,7 +16,7 @@ public class ParkingLotRepository {
     // 初始化ParingLot
     public static void save(ParkingLot parkingLot) {
         Connection connection = DbUtil.getConnection();
-        String sql = "INSERT INTO parking_lot(mark, id, is_empty) " +
+        String sql = "INSERT INTO parking_lot_test(mark, id, is_empty) " +
                 "VALUES (?, ?, 1)";
 
         for (int i = 0; i < parkingLot.getMaxParkNum(); i++) {
@@ -34,8 +34,8 @@ public class ParkingLotRepository {
     // 根据停车位的状态查询，返回相应状态的停车位
     public static List<ParkingSpace> queryByState(Boolean isEmpty) {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT mark, id, is_empty, car_number " +
-                "FROM parking_lot " +
+        String sql = "SELECT mark, id, is_empty, car_number, park_in_time " +
+                "FROM parking_lot_test " +
                 "WHERE is_empty = ?";
 
         ResultSet resultSet;
@@ -51,9 +51,9 @@ public class ParkingLotRepository {
     // 根据停车位和车来更新数据库中停车位的状态
     public static void update(ParkingSpace parkingSpace, String carNumber) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "UPDATE parking_lot " +
+        String sql = "UPDATE parking_lot_test " +
                 "SET is_empty = ?, car_number = ? " +
-                "WHERE mark = ? AND id = ?";
+                "WHERE mark = ? AND id = ? ";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setBoolean(1, !parkingSpace.getEmpty());
@@ -69,7 +69,7 @@ public class ParkingLotRepository {
     public static void empty() {
         Connection connection = DbUtil.getConnection();
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate("TRUNCATE TABLE parking_lot");
+            statement.executeUpdate("TRUNCATE TABLE parking_lot_test");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -78,8 +78,8 @@ public class ParkingLotRepository {
     // 根据票据来查询停车位
     public static List<ParkingSpace> queryByTicket(Ticket userTicket) {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT mark, id, is_empty, car_number " +
-                "FROM parking_lot " +
+        String sql = "SELECT mark, id, is_empty, car_number, park_in_time " +
+                "FROM parking_lot_test " +
                 "WHERE mark = ? AND id = ? AND is_empty = 0 AND car_number = ?";
 
         ResultSet resultSet;
@@ -103,7 +103,8 @@ public class ParkingLotRepository {
             ParkingSpace parkingSpace = new ParkingSpace(resultSet.getString("mark"),
                     resultSet.getInt("id"),
                     resultSet.getBoolean("is_empty"),
-                    resultSet.getString("car_number"));
+                    resultSet.getString("car_number"),
+                    resultSet.getTimestamp("park_in_time"));
             parkingSpaces.add(parkingSpace);
         }
 

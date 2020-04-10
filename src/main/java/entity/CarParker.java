@@ -4,6 +4,7 @@ import database.ParkingLotRepository;
 import exception.InvalidTicketException;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 public class CarParker {
@@ -34,19 +35,53 @@ public class CarParker {
     }
 
     // 取车
-    public static String fetchCar(Ticket userTicket) {
-        String fetchCarNumber = null;
+    public static Ticket fetchCar(Ticket userTicket) {
         List<ParkingSpace> parkingSpace = ParkingLotRepository.queryByTicket(userTicket);
         if (parkingSpace.size() == 0) {
             throw new InvalidTicketException();
         } else {
             try {
-                ParkingLotRepository.update(parkingSpace.get(0), null);
-                fetchCarNumber = userTicket.getCarNumber();
+                ParkingSpace parkingSpaceByTicket = parkingSpace.get(0);
+                ParkingLotRepository.update(parkingSpaceByTicket, null);
+
+                updateTicketInfo(userTicket, parkingSpaceByTicket);
             } catch (SQLException e) {
                 e.printStackTrace();
+                userTicket = null;
             }
-            return fetchCarNumber;
+            return userTicket;
         }
     }
+
+    // 停车成功以后更新车票的信息
+    private static void updateTicketInfo(Ticket userTicket, ParkingSpace parkingSpaceByTicket) {
+        int carTime = getParkingTime(parkingSpaceByTicket);
+        double carCharge = charge(parkingSpaceByTicket);
+        userTicket.setParkInTime(carTime);
+        userTicket.setCharge(carCharge);
+    }
+
+    // 收费啦
+    private static double charge(ParkingSpace parkingSpace) {
+        int parkingTime = getParkingTime(parkingSpace);
+
+        double charge = 0;
+
+        if (parkingTime >= 2 && parkingTime < 5) {
+            charge = (Math.ceil(parkingTime) - 2) * 5;
+        } else if (parkingTime >= 5) {
+            charge = (Math.ceil(parkingTime) - 5) * 10 + 15;
+        }
+        return charge;
+    }
+
+    // 获取停车时间(按分钟来)
+    private static int getParkingTime(ParkingSpace parkingSpace) {
+        Date parkInTime = parkingSpace.getParkInTime();
+        Date fetchTime = new Date(System.currentTimeMillis());
+        long timeGap = fetchTime.getTime() - parkInTime.getTime();
+
+        return (int) timeGap / 1000 / 60;
+    }
+
 }
