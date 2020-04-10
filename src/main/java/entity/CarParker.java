@@ -8,13 +8,21 @@ import java.util.Date;
 import java.util.List;
 
 public class CarParker {
+    private String name;
+    private int age;
+
+    public CarParker(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
     // 获取空的停车位
-    public static List<ParkingSpace> getEmptyParkingSpace() {
+    public List<ParkingSpace> getEmptyParkingSpace() {
         return ParkingLotRepository.queryByState(true);
     }
 
     // 获得车票
-    public static Ticket getTicket(ParkingSpace parkingSpace, String carNumber) {
+    public Ticket getTicket(ParkingSpace parkingSpace, String carNumber) {
         Ticket ticket = null;
 
         try {
@@ -84,4 +92,11 @@ public class CarParker {
         return (int) timeGap / 1000 / 60;
     }
 
+    @Override
+    public String toString() {
+        return "CarParker{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
 }
