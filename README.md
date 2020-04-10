@@ -1,13 +1,12 @@
-# TW-Database
-Database practice in TW
 
-#### 第二周：数据库高级操作（2020/03/18-2020/03/24）
-[2.1 JDBC](https://github.com/whisperrrr/TW-Database/tree/2-1JDBC)：使用JDBC增删改查
 
-[2.6 大作业](https://github.com/whisperrrr/TW-Database/tree/2-6homework)：账号管理-命令行版
+**使用简介**  
+1. 如何导入gradle项目(现在不要求掌握什么是gradle)
+- https://www.youtube.com/watch?v=0s7YYjQEsfU
+- https://www.jetbrains.com/help/idea/gradle.html
 
-#### 第三周：第三章：数据库设计（2020/03/26-2020/03/31）
-[3.4 数据库设计大作业](https://github.com/whisperrrr/TW-Database/tree/3-4databaseDesign)：学生考试系统
-
-#### 后端测评
-[finalTest](https://github.com/whisperrrr/TW-Database/tree/finalTest)：停车场ParkingLot
+2.运行所有测试  
+```
+./gradlew test
+```
+3. 运行单个测试可以直接点击对应测试右边的绿色三角形
