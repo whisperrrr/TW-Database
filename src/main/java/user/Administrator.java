@@ -33,7 +33,7 @@ public class Administrator extends User {
         System.out.println("\t\t\t1.2.3 指定老师的所有课程信息");
         System.out.println("\t\t1.3 查询老师信息");
         System.out.println("\t\t\t1.3.1 所有老师信息");
-        System.out.println("\t\t\t1.3.2 指定信息");
+        System.out.println("\t\t\t1.3.2 指定老师信息");
         System.out.println("\t2. 新增");
         System.out.println("\t\t2.1 新增学生信息");
         System.out.println("\t\t2.2 新增课程信息");
