@@ -1,10 +1,17 @@
 package com.thoughtworks;
 
-import java.util.Objects;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
+import java.util.Objects;
+@Table("student_new")
 public class Student {
+    @Id
     private String name;
+    @Column("gender")
     private String gender;
+    @Column("class_num")
     private String classNum;
 
     public String getName() {
