@@ -17,6 +17,8 @@ SpringBoot practice in TW
 
 [1.3 Spring data JDBC](https://github.com/whisperrrr/TW-Database/tree/springboot-JDBC)：springboot-JDBC
 
+[1.4 Spring three tier](https://github.com/whisperrrr/TW-Database/tree/springboot-three-tier)：用三层架构进行重构
+
 
 #### 后端测评
 [finalTest](https://github.com/whisperrrr/TW-Database/tree/finalTest)：停车场ParkingLot
